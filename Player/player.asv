@@ -1,0 +1,30 @@
+cd('C:\Users\zsi001\Desktop\');
+filename = 'DetectedPlayers.xlsx';
+sheet = 1;
+xlRange = 'A1:E55723';
+
+allData = xlsread(filename,sheet,xlRange);
+[sizeRow, sizeCol] = size(allData);
+
+ids = unique(allData(:,3));
+
+allData(:,[4,5]) = allData(:,[4,5]) / 100;
+ for i = 1:size(ids)
+    playerid = ids(i);
+    playerdata = [];
+
+    for i = 1 : sizeRow
+        if(allData(i,3) == playerid)
+           playerdata = [playerdata;allData(i, 1:5) ];
+        end
+    end
+    playerAcc = [];
+    for i = 1: (size(playerdata,1)-1)
+        playerAcc = [playerAcc ,calAcc(playerdata(i,:), playerdata(1+1,:))];
+    end
+    playerdata(1,:) = [];
+    h=figure;
+    plot(playerdata(:,2), playerAcc);
+    saveas(h,num2str(playerid),'jpg');
+    
+ end
